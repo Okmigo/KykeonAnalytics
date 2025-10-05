@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal - Kykeon Analytics</title>
+    <meta name="description" content="Privacy policy, terms of service, and legal information for Kykeon Analytics.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #0B0D10;
+            --bg-secondary: #1A1D23;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --accent-primary: #5B8CFF;
+            --accent-success: #2FCB89;
+            --accent-warning: #FFB020;
+            --accent-danger: #F46363;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #4A7CE8 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.3);
+        }
+        
+        .legal-section {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .legal-section:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(91, 140, 255, 0.1);
+        }
+        
+        .legal-nav {
+            position: sticky;
+            top: 100px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .legal-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .legal-nav a:hover {
+            background: rgba(91, 140, 255, 0.1);
+            color: var(--accent-primary);
+        }
+        
+        .legal-nav a.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .cookie-table {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(91, 140, 255, 0.1);
+        }
+        
+        .cookie-table th {
+            background: rgba(91, 140, 255, 0.1);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .cookie-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(91, 140, 255, 0.1);
+        }
+        
+        .cookie-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .cookie-category {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .cookie-essential {
+            background: rgba(47, 203, 137, 0.2);
+            color: var(--accent-success);
+            border: 1px solid rgba(47, 203, 137, 0.3);
+        }
+        
+        .cookie-analytics {
+            background: rgba(91, 140, 255, 0.2);
+            color: var(--accent-primary);
+            border: 1px solid rgba(91, 140, 255, 0.3);
+        }
+        
+        .cookie-marketing {
+            background: rgba(255, 176, 32, 0.2);
+            color: var(--accent-warning);
+            border: 1px solid rgba(255, 176, 32, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-gradient">Kykeon Analytics</a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">What We Do</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Users</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Organizations</a>
+                            <a href="market-monitoring.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Market Monitoring</a>
+                        </div>
+                    </div>
+                    
+                    <a href="results.html" class="text-gray-300 hover:text-white px-3 py-2">Results</a>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Services</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Sample Testing</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Spectral Libraries</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">More</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="about.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">About</a>
+                            <a href="faq.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">FAQ</a>
+                            <a href="blog.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Blog</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Contact</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">General Contact</a>
+                            <a href="contact.html#laboratory" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Laboratory</a>
+                            <a href="contact.html#policy" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Drug Policy</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="results.html" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">RESULTS</a>
+                    <a href="index.html#warnings" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">WARNINGS</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-gray-900 via-gray-900 to-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Legal <span class="text-gradient">Information</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-4xl mx-auto mb-8">
+                Privacy policy, terms of service, cookie policy, and legal notices for Kykeon Analytics
+            </p>
+        </div>
+    </section>
+    
+    <!-- Legal Content -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Navigation -->
+                <div class="lg:col-span-1">
+                    <div class="legal-nav">
+                        <h3 class="text-lg font-bold mb-4">Legal Documents</h3>
+                        <a href="#privacy" class="active" onclick="showSection('privacy')">Privacy Policy</a>
+                        <a href="#terms" onclick="showSection('terms')">Terms of Service</a>
+                        <a href="#cookies" onclick="showSection('cookies')">Cookie Policy</a>
+                        <a href="#notice" onclick="showSection('notice')">Legal Notice</a>
+                        <a href="#disclaimers" onclick="showSection('disclaimers')">Disclaimers</a>
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="lg:col-span-3">
+                    <!-- Privacy Policy -->
+                    <div id="privacy-section" class="legal-content">
+                        <div class="legal-section">
+                            <h2 class="text-3xl font-bold mb-6">Privacy Policy</h2>
+                            <p class="text-gray-300 mb-6">Last updated: September 15, 2024</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">1. Introduction</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Kykeon Analytics ("we," "our," or "us") is committed to protecting your privacy and ensuring the security of your personal data. 
+                                        This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our analytical services, 
+                                        visit our website, or interact with us.
+                                    </p>
+                                    <p class="text-gray-300">
+                                        We operate in compliance with the General Data Protection Regulation (GDPR) and other applicable data protection laws. 
+                                        By using our services, you agree to the collection and use of information in accordance with this Privacy Policy.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">2. Information We Collect</h3>
+                                    <p class="text-gray-300 mb-4">We collect several types of information for various purposes to provide and improve our services:</p>
+                                    
+                                    <h4 class="font-semibold mb-2">Personal Data</h4>
+                                    <ul class="list-disc list-inside text-gray-300 mb-4 space-y-1">
+                                        <li>Email address</li>
+                                        <li>Phone number (for SMS alerts)</li>
+                                        <li>Name (optional)</li>
+                                        <li>Organization details (for organizational services)</li>
+                                        <li>Payment information (processed by third-party providers)</li>
+                                    </ul>
+                                    
+                                    <h4 class="font-semibold mb-2">Analytical Data</h4>
+                                    <ul class="list-disc list-inside text-gray-300 mb-4 space-y-1">
+                                        <li>Sample identification codes</li>
+                                        <li>Analysis results and reports</li>
+                                        <li>Spectral data</li>
+                                        <li>Testing methodology information</li>
+                                    </ul>
+                                    
+                                    <h4 class="font-semibold mb-2">Usage Data</h4>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>IP address and browser information</li>
+                                        <li>Pages visited and time spent</li>
+                                        <li>Device identifiers</li>
+                                        <li>Cookie data</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">3. How We Use Your Information</h3>
+                                    <p class="text-gray-300 mb-4">We use the collected information for various purposes:</p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>To provide and maintain our analytical services</li>
+                                        <li>To process sample testing and deliver results</li>
+                                        <li>To provide customer support and respond to inquiries</li>
+                                        <li>To send important safety alerts and service updates</li>
+                                        <li>To improve our services and develop new features</li>
+                                        <li>To comply with legal and regulatory requirements</li>
+                                        <li>To prevent fraud and ensure security</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">4. Data Retention</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We retain personal data only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, 
+                                        unless a longer retention period is required by law. Sample data and results are retained indefinitely for 
+                                        research and public safety purposes, but are anonymized and cannot be linked to individual users.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">5. Your Rights (GDPR)</h3>
+                                    <p class="text-gray-300 mb-4">Under GDPR, you have the following rights:</p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li><strong>Right to Access:</strong> Request copies of your personal data</li>
+                                        <li><strong>Right to Rectification:</strong> Correct inaccurate or incomplete data</li>
+                                        <li><strong>Right to Erasure:</strong> Request deletion of your personal data</li>
+                                        <li><strong>Right to Restrict Processing:</strong> Limit how we use your data</li>
+                                        <li><strong>Right to Data Portability:</strong> Transfer your data to another organization</li>
+                                        <li><strong>Right to Object:</strong> Object to how we use your data</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">6. Data Security</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, 
+                                        alteration, disclosure, or destruction. This includes encryption, secure servers, and access controls. 
+                                        However, no method of transmission over the internet is 100% secure.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">7. Third-Party Services</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, 
+                                        except as described in this policy. We may share anonymized, aggregated data for research and public health purposes.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">8. Contact Information</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        If you have questions about this Privacy Policy or your personal data, please contact us:
+                                    </p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Email: info@kykeonanalytics.com</li>
+                                        <li>Address: Plaza Nuestra Señora del Buen Camino número 11, planta BJ, Puerta C - 28023 MADRID (Madrid)</li>
+                                        <li>Data Protection Officer: dpo@kykeonanalytics.com</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms of Service -->
+                    <div id="terms-section" class="legal-content hidden">
+                        <div class="legal-section">
+                            <h2 class="text-3xl font-bold mb-6">Terms of Service</h2>
+                            <p class="text-gray-300 mb-6">Last updated: September 15, 2024</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">1. Acceptance of Terms</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        By accessing and using Kykeon Analytics services, you agree to be bound by these Terms of Service. 
+                                        If you disagree with any part of the terms, you may not access our services.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">2. Services Description</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Kykeon Analytics provides analytical chemistry services, spectral libraries, training, and harm reduction information. 
+                                        Our services are provided for research, educational, and harm reduction purposes only.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">3. User Responsibilities</h3>
+                                    <p class="text-gray-300 mb-4">Users agree to:</p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>Use our services only for lawful purposes</li>
+                                        <li>Provide accurate and complete information</li>
+                                        <li>Not attempt to circumvent security measures</li>
+                                        <li>Respect intellectual property rights</li>
+                                        <li>Comply with all applicable laws and regulations</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">4. Intellectual Property</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        All content, including spectral libraries, analysis methods, and educational materials, 
+                                        are protected by intellectual property laws. Our spectral libraries are provided under Creative Commons license 
+                                        for harm reduction organizations.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">5. Disclaimer of Warranties</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Our services are provided "as is" without any warranties, express or implied. 
+                                        We do not guarantee the accuracy, completeness, or reliability of any information provided.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">6. Limitation of Liability</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Kykeon Analytics shall not be liable for any indirect, incidental, special, consequential, 
+                                        or punitive damages arising from the use of our services. Users assume all responsibility 
+                                        for their decisions and actions based on our analysis results.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">7. Service Modifications</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We reserve the right to modify or discontinue our services at any time without notice. 
+                                        We are not liable for any modification, suspension, or discontinuation of services.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">8. Governing Law</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        These terms shall be governed by and construed in accordance with the laws of Spain, 
+                                        without regard to its conflict of law provisions.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cookie Policy -->
+                    <div id="cookies-section" class="legal-content hidden">
+                        <div class="legal-section">
+                            <h2 class="text-3xl font-bold mb-6">Cookie Policy</h2>
+                            <p class="text-gray-300 mb-6">Last updated: September 15, 2024</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">1. What Are Cookies</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Cookies are small text files that are placed on your computer or mobile device when you visit websites. 
+                                        They are widely used to make websites work efficiently and provide information to website owners.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">2. How We Use Cookies</h3>
+                                    <p class="text-gray-300 mb-4">We use cookies for various purposes:</p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>To enable basic website functionality</li>
+                                        <li>To analyze website usage and improve our services</li>
+                                        <li>To remember your preferences and settings</li>
+                                        <li>To provide enhanced user experience</li>
+                                        <li>To ensure security and prevent fraud</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">3. Cookie Categories</h3>
+                                    
+                                    <div class="cookie-table mb-6">
+                                        <table class="w-full">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cookie Name</th>
+                                                    <th>Category</th>
+                                                    <th>Purpose</th>
+                                                    <th>Duration</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="font-mono">session_id</td>
+                                                    <td><span class="cookie-category cookie-essential">Essential</span></td>
+                                                    <td>Maintains user session</td>
+                                                    <td>Session</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-mono">csrf_token</td>
+                                                    <td><span class="cookie-category cookie-essential">Essential</span></td>
+                                                    <td>Security token for forms</td>
+                                                    <td>Session</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-mono">analytics_id</td>
+                                                    <td><span class="cookie-category cookie-analytics">Analytics</span></td>
+                                                    <td>Website usage analysis</td>
+                                                    <td>2 years</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-mono">preferences</td>
+                                                    <td><span class="cookie-category cookie-essential">Functional</span></td>
+                                                    <td>User preferences</td>
+                                                    <td>1 year</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">4. Managing Cookies</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        You can control and manage cookies through your browser settings. Most browsers allow you to:
+                                    </p>
+                                    <ul class="list-disc list-inside text-gray-300 space-y-1">
+                                        <li>View and delete cookies</li>
+                                        <li>Block cookies from specific websites</li>
+                                        <li>Block all cookies</li>
+                                        <li>Clear all cookies when you close your browser</li>
+                                    </ul>
+                                    <p class="text-gray-300 mt-4">
+                                        Please note that disabling cookies may affect the functionality of our website and your user experience.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">5. Third-Party Cookies</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We do not use third-party cookies for advertising or tracking purposes. All cookies used on our website 
+                                        are either essential for functionality or used for anonymous analytics to improve our services.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legal Notice -->
+                    <div id="notice-section" class="legal-content hidden">
+                        <div class="legal-section">
+                            <h2 class="text-3xl font-bold mb-6">Legal Notice</h2>
+                            <p class="text-gray-300 mb-6">Last updated: September 15, 2024</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">1. Company Information</h3>
+                                    <div class="bg-gray-800/50 p-6 rounded-lg">
+                                        <p class="font-semibold mb-2">Kykeon Analytics</p>
+                                        <p class="text-gray-300">Plaza Nuestra Señora del Buen Camino número 11</p>
+                                        <p class="text-gray-300">planta BJ, Puerta C</p>
+                                        <p class="text-gray-300">28023 MADRID (Madrid)</p>
+                                        <p class="text-gray-300">Spain</p>
+                                        <br>
+                                        <p class="text-gray-300">Email: info@kykeonanalytics.com</p>
+                                        <p class="text-gray-300">Laboratory: office@kykeonanalytics.com</p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">2. Legal Status</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Kykeon Analytics operates as a research and analytical chemistry laboratory. 
+                                        We provide analytical services, spectral libraries, and harm reduction information 
+                                        for educational and research purposes.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">3. Regulatory Compliance</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We operate in compliance with Spanish and EU regulations regarding chemical analysis, 
+                                        data protection (GDPR), and laboratory safety standards. Our services are provided 
+                                        for informational and harm reduction purposes only.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">4. Intellectual Property</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        All content on this website, including text, graphics, logos, and spectral libraries, 
+                                        is protected by intellectual property laws. Our spectral libraries are provided under 
+                                        Creative Commons license for harm reduction organizations.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">5. Limitation of Liability</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        The information provided on this website and through our services is for informational purposes only. 
+                                        We are not responsible for any decisions or actions taken based on our analysis results. 
+                                        Users assume full responsibility for their use of our services.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">6. External Links</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Our website may contain links to external websites. We are not responsible for the content 
+                                        or privacy practices of these third-party websites.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Disclaimers -->
+                    <div id="disclaimers-section" class="legal-content hidden">
+                        <div class="legal-section">
+                            <h2 class="text-3xl font-bold mb-6">Disclaimers</h2>
+                            <p class="text-gray-300 mb-6">Last updated: September 15, 2024</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Medical Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Kykeon Analytics is not a medical organization. Our services and information are provided for 
+                                        harm reduction, educational, and research purposes only. We do not provide medical advice, 
+                                        diagnosis, or treatment. Always consult qualified healthcare professionals for medical concerns.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Legal Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Our services are provided for informational purposes only. Users are responsible for complying 
+                                        with all applicable laws and regulations in their jurisdiction. We do not condone or encourage 
+                                        illegal drug use. Our harm reduction approach recognizes that drug use exists and aims to reduce its potential harms.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Accuracy Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        While we strive for accuracy in our analytical results, we cannot guarantee 100% accuracy. 
+                                        Our results are based on the sample provided and current analytical capabilities. 
+                                        Users should consider our results as one piece of information among many when making decisions.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Service Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Our services are provided "as is" without any warranties. We reserve the right to modify, 
+                                        suspend, or discontinue services at any time. We are not liable for any damages arising from 
+                                        the use or inability to use our services.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Third-Party Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        We do not work with vendors or suppliers of psychoactive substances. All our market monitoring 
+                                        is conducted through anonymous purchases. We maintain complete independence from the substances 
+                                        we analyze to ensure unbiased results.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-xl font-bold mb-3">Harm Reduction Disclaimer</h3>
+                                    <p class="text-gray-300 mb-4">
+                                        Our harm reduction approach does not condone drug use but recognizes that it occurs and seeks 
+                                        to minimize its negative consequences. We provide information and services to help people make 
+                                        safer choices, but the safest choice is always to avoid drug use entirely.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="text-2xl font-bold text-gradient mb-4">Kykeon Analytics</div>
+                    <p class="text-gray-400 mb-4">
+                        A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="services-users.html" class="hover:text-white transition-colors">Sample Testing</a></li>
+                        <li><a href="services-organizations.html" class="hover:text-white transition-colors">Spectral Libraries</a></li>
+                        <li><a href="market-monitoring.html" class="hover:text-white transition-colors">Market Monitoring</a></li>
+                        <li><a href="results.html" class="hover:text-white transition-colors">Results</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="mailto:info@kykeonanalytics.com" class="hover:text-white transition-colors">info@kykeonanalytics.com</a></li>
+                        <li><a href="mailto:office@kykeonanalytics.com" class="hover:text-white transition-colors">office@kykeonanalytics.com</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Form</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Kykeon Analytics. All rights reserved. | <a href="legal.html" class="hover:text-white transition-colors">Privacy Policy & Legal</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.legal-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.legal-nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+        }
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            anime({
+                targets: '.legal-section',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: anime.stagger(200),
+                duration: 800,
+                easing: 'easeOutQuart'
+            });
+        });
+    </script>
+</body>
+</html>

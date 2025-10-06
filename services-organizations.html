@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spectral Libraries & Organization Services - Kykeon Analytics</title>
+    <meta name="description" content="Free FTIR and NMR spectral libraries for harm reduction organizations. Training, tools, and support for analytical chemistry.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #0B0D10;
+            --bg-secondary: #1A1D23;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --accent-primary: #5B8CFF;
+            --accent-success: #2FCB89;
+            --accent-warning: #FFB020;
+            --accent-danger: #F46363;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(91, 140, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #4A7CE8 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.3);
+        }
+        
+        .form-input {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.1);
+        }
+        
+        .library-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .library-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(91, 140, 255, 0.1);
+        }
+        
+        .training-module {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(47, 203, 137, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .training-module:hover {
+            border-color: var(--accent-success);
+            box-shadow: 0 5px 20px rgba(47, 203, 137, 0.1);
+        }
+        
+        .progress-bar {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 8px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-success) 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(91, 140, 255, 0.2);
+        }
+        
+        .search-bar {
+            position: relative;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.2);
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(91, 140, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(91, 140, 255, 0.1);
+        }
+        
+        .equipment-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 176, 32, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .equipment-card:hover {
+            border-color: var(--accent-warning);
+            box-shadow: 0 5px 20px rgba(255, 176, 32, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-gradient">Kykeon Analytics</a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">What We Do</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Users</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Organizations</a>
+                            <a href="market-monitoring.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Market Monitoring</a>
+                        </div>
+                    </div>
+                    
+                    <a href="results.html" class="text-gray-300 hover:text-white px-3 py-2">Results</a>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Services</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Sample Testing</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Spectral Libraries</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">More</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="about.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">About</a>
+                            <a href="faq.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">FAQ</a>
+                            <a href="blog.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Blog</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Contact</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">General Contact</a>
+                            <a href="contact.html#laboratory" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Laboratory</a>
+                            <a href="contact.html#policy" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Drug Policy</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="results.html" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">RESULTS</a>
+                    <a href="index.html#warnings" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">WARNINGS</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-gray-900 via-gray-900 to-green-900/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Spectral Libraries & <span class="text-gradient">Organization Services</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-4xl mx-auto mb-8">
+                Free spectral libraries, training, and tools for harm reduction organizations. 
+                Empower your team with professional analytical chemistry resources.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Spectral Libraries -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Free Spectral Libraries</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    We create and maintain comprehensive spectral libraries for FTIR and NMR analysis. 
+                    All libraries are provided free of charge under Creative Commons license.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                <!-- FTIR Library -->
+                <div class="library-card p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">📡</div>
+                        <div>
+                            <h3 class="text-2xl font-bold">FTIR Spectral Library</h3>
+                            <p class="text-gray-400">Fourier-transform infrared spectra</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-blue-900/20 p-4 rounded-lg border border-blue-500/20">
+                            <h4 class="font-semibold text-blue-400 mb-2">Compatible Formats</h4>
+                            <ul class="text-sm text-gray-300 space-y-1">
+                                <li>• Thermofisher/Omnic format</li>
+                                <li>• Bruker/Opus format</li>
+                                <li>• Individual .JDX files</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-green-900/20 p-4 rounded-lg border border-green-500/20">
+                            <h4 class="font-semibold text-green-400 mb-2">Coverage</h4>
+                            <ul class="text-sm text-gray-300 space-y-1">
+                                <li>• Classic psychoactive substances</li>
+                                <li>• Novel psychoactive substances (NPS)</li>
+                                <li>• Precursors and intermediates</li>
+                                <li>• Adulterants and cutting agents</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openLibraryAccess('ftir')" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                        Access FTIR Library
+                    </button>
+                </div>
+                
+                <!-- NMR Library -->
+                <div class="library-card p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">🔬</div>
+                        <div>
+                            <h3 class="text-2xl font-bold">NMR Spectral Library</h3>
+                            <p class="text-gray-400">Nuclear magnetic resonance spectra</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <div class="bg-purple-900/20 p-4 rounded-lg border border-purple-500/20">
+                            <h4 class="font-semibold text-purple-400 mb-2">Available Data</h4>
+                            <ul class="text-sm text-gray-300 space-y-1">
+                                <li>• 1H NMR spectra</li>
+                                <li>• 13C NMR spectra</li>
+                                <li>• 2D correlation experiments</li>
+                                <li>• Processed and raw data</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-yellow-900/20 p-4 rounded-lg border border-yellow-500/20">
+                            <h4 class="font-semibold text-yellow-400 mb-2">Quality Assurance</h4>
+                            <ul class="text-sm text-gray-300 space-y-1">
+                                <li>• Verified reference standards</li>
+                                <li>• Multiple solvent systems</li>
+                                <li>• Temperature-controlled acquisition</li>
+                                <li>• Regular updates and expansions</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openLibraryAccess('nmr')" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                        Access NMR Library
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Library Search -->
+            <div class="bg-gray-800/50 rounded-2xl p-8 border border-gray-700">
+                <h3 class="text-2xl font-bold mb-6">Search Spectral Libraries</h3>
+                
+                <div class="search-bar mb-6">
+                    <input type="text" id="librarySearch" class="form-input w-full" placeholder="Search by substance name, CAS number, or molecular formula...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <select class="form-input">
+                        <option value="">All Libraries</option>
+                        <option value="ftir">FTIR Only</option>
+                        <option value="nmr">NMR Only</option>
+                    </select>
+                    
+                    <select class="form-input">
+                        <option value="">All Categories</option>
+                        <option value="classic">Classic Drugs</option>
+                        <option value="nps">Novel Psychoactives</option>
+                        <option value="precursors">Precursors</option>
+                        <option value="adulterants">Adulterants</option>
+                    </select>
+                    
+                    <button onclick="searchLibraries()" class="btn-primary py-3 px-6 rounded-lg text-white">
+                        Search
+                    </button>
+                </div>
+                
+                <div id="libraryResults" class="space-y-4">
+                    <!-- Results will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Training Services -->
+    <section class="py-20 bg-gray-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Training Services</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Whether you're starting your harm reduction project or need help training workers and volunteers, 
+                    we're here to support your team with professional education.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- FTIR Training -->
+                <div class="training-module p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">📡</div>
+                        <h3 class="text-xl font-bold">FTIR Operation</h3>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Comprehensive training on FTIR spectrometer operation, sample preparation, and spectral interpretation.
+                    </p>
+                    
+                    <div class="progress-bar mb-4">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <ul class="text-sm text-gray-400 space-y-2 mb-4">
+                        <li>• Equipment setup and calibration</li>
+                        <li>• Sample preparation techniques</li>
+                        <li>• Spectral acquisition parameters</li>
+                        <li>• Basic interpretation skills</li>
+                        <li>• Quality control procedures</li>
+                    </ul>
+                    
+                    <button onclick="startTraining('ftir')" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg transition-colors">
+                        Start Training
+                    </button>
+                </div>
+                
+                <!-- Harm Reduction Basics -->
+                <div class="training-module p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🛡️</div>
+                        <h3 class="text-xl font-bold">Harm Reduction Basics</h3>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Foundational knowledge for new harm reductionists covering principles, ethics, and best practices.
+                    </p>
+                    
+                    <div class="progress-bar mb-4">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <ul class="text-sm text-gray-400 space-y-2 mb-4">
+                        <li>• Harm reduction principles</li>
+                        <li>• Drug checking ethics</li>
+                        <li>• Communication strategies</li>
+                        <li>• Legal considerations</li>
+                        <li>• Safety protocols</li>
+                    </ul>
+                    
+                    <button onclick="startTraining('harm-reduction')" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg transition-colors">
+                        Start Training
+                    </button>
+                </div>
+                
+                <!-- Advanced Analytics -->
+                <div class="training-module p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">⚗️</div>
+                        <h3 class="text-xl font-bold">Advanced Analytics</h3>
+                    </div>
+                    
+                    <p class="text-gray-300 mb-4">
+                        Advanced topics including LC-MS operation, data analysis, and novel substance identification.
+                    </p>
+                    
+                    <div class="progress-bar mb-4">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <ul class="text-sm text-gray-400 space-y-2 mb-4">
+                        <li>• LC-MS methodology</li>
+                        <li>• Advanced data analysis</li>
+                        <li>• Novel substance workflows</li>
+                        <li>• Method development</li>
+                        <li>• Research applications</li>
+                    </ul>
+                    
+                    <button onclick="startTraining('advanced')" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded-lg transition-colors">
+                        Start Training
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Equipment Advisory -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Equipment Advisory Services</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Thinking about buying new equipment or expanding your project? We can help you decide what's best for your needs and budget.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">How We Can Help</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-sm font-bold">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Equipment Selection</h4>
+                                <p class="text-gray-300">Help choose the right analytical instruments based on your specific needs, budget, and workflow requirements.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-sm font-bold">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Project Planning</h4>
+                                <p class="text-gray-300">Assist with project scope definition, timeline planning, and resource allocation for maximum impact.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-sm font-bold">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Implementation Support</h4>
+                                <p class="text-gray-300">Provide guidance on installation, validation, and integration of new equipment into existing workflows.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openAdvisoryModal()" class="mt-8 btn-primary px-8 py-3 rounded-lg text-white font-medium">
+                        Get Equipment Advice
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="equipment-card p-6">
+                        <div class="text-3xl mb-4">🔬</div>
+                        <h4 class="font-semibold mb-2">NMR Spectrometers</h4>
+                        <p class="text-sm text-gray-400 mb-3">Guidance on field strength, probes, and accessories</p>
+                        <div class="text-xs text-gray-500">Starting from €50k</div>
+                    </div>
+                    
+                    <div class="equipment-card p-6">
+                        <div class="text-3xl mb-4">⚗️</div>
+                        <h4 class="font-semibold mb-2">LC-MS Systems</h4>
+                        <p class="text-sm text-gray-400 mb-3">Triple quadrupole and Q-TOF recommendations</p>
+                        <div class="text-xs text-gray-500">Starting from €80k</div>
+                    </div>
+                    
+                    <div class="equipment-card p-6">
+                        <div class="text-3xl mb-4">📡</div>
+                        <h4 class="font-semibold mb-2">FTIR Spectrometers</h4>
+                        <p class="text-sm text-gray-400 mb-3">Benchtop and portable options</p>
+                        <div class="text-xs text-gray-500">Starting from €15k</div>
+                    </div>
+                    
+                    <div class="equipment-card p-6">
+                        <div class="text-3xl mb-4">🧪</div>
+                        <h4 class="font-semibold mb-2">Sample Prep</h4>
+                        <p class="text-sm text-gray-400 mb-3">Automation and workflow optimization</p>
+                        <div class="text-xs text-gray-500">Custom solutions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Organization Portal -->
+    <section class="py-20 bg-gray-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Organization Portal</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Access our complete suite of tools and resources through our secure organization portal.
+                </p>
+            </div>
+            
+            <div class="max-w-2xl mx-auto bg-gray-800/50 rounded-2xl p-8 border border-gray-700">
+                <div class="text-center mb-8">
+                    <div class="text-4xl mb-4">🏢</div>
+                    <h3 class="text-2xl font-bold mb-2">Organization Access</h3>
+                    <p class="text-gray-300">Login to access spectral libraries, training modules, and support resources.</p>
+                </div>
+                
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Organization Name</label>
+                        <input type="text" class="form-input w-full" placeholder="Your organization name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Access Code</label>
+                        <input type="password" class="form-input w-full" placeholder="Provided access code">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded">
+                            <span class="text-sm">Remember this device</span>
+                        </label>
+                        <a href="#" class="text-sm text-blue-400 hover:text-blue-300">Request Access</a>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                        Access Portal
+                    </button>
+                </form>
+                
+                <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                    <p class="text-sm text-gray-400 mb-4">Don't have access yet?</p>
+                    <button onclick="openAccessRequest()" class="text-blue-400 hover:text-blue-300 font-medium">
+                        Request Organization Access
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modals -->
+    <!-- Library Access Modal -->
+    <div id="libraryModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Spectral Library Access</h3>
+                <button onclick="closeModal('libraryModal')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="libraryContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-700">
+                <p class="text-sm text-gray-400 mb-4">
+                    These libraries are provided free of charge under Creative Commons license for harm reduction purposes.
+                </p>
+                <button onclick="downloadLibrary()" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                    Download Library
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Advisory Modal -->
+    <div id="advisoryModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">Equipment Advisory Service</h3>
+                <button onclick="closeModal('advisoryModal')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Organization Name</label>
+                    <input type="text" class="form-input w-full" placeholder="Your organization">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Current Equipment</label>
+                    <textarea class="form-input w-full h-20" placeholder="What equipment do you currently have?"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Budget Range</label>
+                    <select class="form-input w-full">
+                        <option>Under €25,000</option>
+                        <option>€25,000 - €50,000</option>
+                        <option>€50,000 - €100,000</option>
+                        <option>€100,000 - €250,000</option>
+                        <option>Over €250,000</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Primary Needs</label>
+                    <textarea class="form-input w-full h-20" placeholder="What are your primary analytical needs?"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Contact Email</label>
+                    <input type="email" class="form-input w-full" placeholder="your@email.com">
+                </div>
+                
+                <button type="submit" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                    Submit Advisory Request
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="text-2xl font-bold text-gradient mb-4">Kykeon Analytics</div>
+                    <p class="text-gray-400 mb-4">
+                        A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="services-users.html" class="hover:text-white transition-colors">Sample Testing</a></li>
+                        <li><a href="services-organizations.html" class="hover:text-white transition-colors">Spectral Libraries</a></li>
+                        <li><a href="market-monitoring.html" class="hover:text-white transition-colors">Market Monitoring</a></li>
+                        <li><a href="results.html" class="hover:text-white transition-colors">Results</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="mailto:info@kykeonanalytics.com" class="hover:text-white transition-colors">info@kykeonanalytics.com</a></li>
+                        <li><a href="mailto:office@kykeonanalytics.com" class="hover:text-white transition-colors">office@kykeonanalytics.com</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Form</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Kykeon Analytics. All rights reserved. | <a href="legal.html" class="hover:text-white transition-colors">Privacy Policy & Legal</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Library data
+        const libraryData = {
+            ftir: {
+                substances: [
+                    'MDMA', 'Cocaine', 'Heroin', 'LSD', 'Psilocybin', 'DMT', 'Mescaline', '2C-B',
+                    'Ketamine', 'PCP', 'Amphetamine', 'Methamphetamine', 'Mephedrone', 'MDPV',
+                    'Fentanyl', 'Oxycodone', 'Morphine', 'Codeine', 'Diazepam', 'Alprazolam'
+                ],
+                formats: ['Thermofisher/Omnic', 'Bruker/Opus', 'Individual .JDX files'],
+                lastUpdated: '2024-09-15'
+            },
+            nmr: {
+                substances: [
+                    'MDMA', 'Methamphetamine', 'Amphetamine', 'Cocaine', 'Heroin', 'Morphine',
+                    'Codeine', 'LSD', 'Psilocybin', 'DMT', 'Mescaline', '2C-B', '2C-E',
+                    'Ketamine', 'PCP', 'Mephedrone', 'MDPV', 'Fentanyl', 'Oxycodone'
+                ],
+                experiments: ['1H NMR', '13C NMR', 'DEPT', 'COSY', 'HSQC', 'HMBC'],
+                lastUpdated: '2024-09-10'
+            }
+        };
+        
+        // Modal functions
+        function openLibraryAccess(type) {
+            const modal = document.getElementById('libraryModal');
+            const content = document.getElementById('libraryContent');
+            const data = libraryData[type];
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold mb-4">${type.toUpperCase()} Spectral Library</h4>
+                    <p class="text-gray-300 mb-4">
+                        Our comprehensive ${type.toUpperCase()} library contains spectra for ${data.substances.length} substances, 
+                        including classic drugs, novel psychoactives, and common adulterants.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2">Substances Covered</h5>
+                            <div class="text-sm text-gray-300">
+                                ${data.substances.slice(0, 10).join(', ')}...
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">and ${data.substances.length - 10} more</div>
+                        </div>
+                        
+                        <div class="bg-gray-800 p-4 rounded-lg">
+                            <h5 class="font-semibold mb-2">Last Updated</h5>
+                            <div class="text-sm text-gray-300">${data.lastUpdated}</div>
+                            <div class="text-xs text-gray-500 mt-1">Regular updates provided</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-900/20 p-4 rounded-lg border border-blue-500/20">
+                        <h5 class="font-semibold text-blue-400 mb-2">Available Formats</h5>
+                        <div class="text-sm text-gray-300">
+                            ${type === 'ftir' ? 
+                                'Thermofisher/Omnic, Bruker/Opus, Individual .JDX files' :
+                                '1H NMR, 13C NMR, DEPT, COSY, HSQC, HMBC experiments'
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function openAdvisoryModal() {
+            document.getElementById('advisoryModal').classList.add('active');
+        }
+        
+        function openAccessRequest() {
+            alert('Access request form will be available soon. Please contact us directly for immediate assistance.');
+        }
+        
+        function downloadLibrary() {
+            alert('Library download will begin shortly. Thank you for using our spectral libraries!');
+            closeModal('libraryModal');
+        }
+        
+        function searchLibraries() {
+            const searchTerm = document.getElementById('librarySearch').value.toLowerCase();
+            const resultsContainer = document.getElementById('libraryResults');
+            
+            if (searchTerm.length < 3) {
+                resultsContainer.innerHTML = '<p class="text-gray-400">Please enter at least 3 characters to search.</p>';
+                return;
+            }
+            
+            // Simulate search results
+            const mockResults = [
+                { name: 'MDMA', type: 'Classic', ftir: true, nmr: true, cas: '42542-10-9' },
+                { name: '2C-B', type: 'Novel', ftir: true, nmr: true, cas: '66142-81-2' },
+                { name: 'Fentanyl', type: 'Opioid', ftir: true, nmr: true, cas: '437-38-7' },
+                { name: 'Ketamine', type: 'Dissociative', ftir: true, nmr: true, cas: '6740-88-1' }
+            ].filter(item => item.name.toLowerCase().includes(searchTerm));
+            
+            if (mockResults.length === 0) {
+                resultsContainer.innerHTML = '<p class="text-gray-400">No results found. Try a different search term.</p>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = mockResults.map(result => `
+                <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-semibold text-lg">${result.name}</h4>
+                        <span class="text-xs bg-gray-700 px-2 py-1 rounded">${result.type}</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mb-3">CAS: ${result.cas}</div>
+                    <div class="flex space-x-4">
+                        ${result.ftir ? '<span class="text-xs bg-blue-600 px-2 py-1 rounded">FTIR Available</span>' : ''}
+                        ${result.nmr ? '<span class="text-xs bg-green-600 px-2 py-1 rounded">NMR Available</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function startTraining(type) {
+            alert(`Training module for ${type} will be available soon. Please contact us for in-person training options.`);
+        }
+        
+        // Search functionality
+        document.getElementById('librarySearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            
+            if (searchTerm.length >= 2) {
+                const mockSuggestions = libraryData.ftir.substances
+                    .filter(substance => substance.toLowerCase().includes(searchTerm))
+                    .slice(0, 5);
+                
+                if (mockSuggestions.length > 0) {
+                    searchResults.innerHTML = mockSuggestions.map(suggestion => 
+                        `<div class="search-result-item" onclick="selectSearchResult('${suggestion}')">${suggestion}</div>`
+                    ).join('');
+                    searchResults.style.display = 'block';
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+        
+        function selectSearchResult(result) {
+            document.getElementById('librarySearch').value = result;
+            document.getElementById('searchResults').style.display = 'none';
+            searchLibraries();
+        }
+        
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-bar')) {
+                document.getElementById('searchResults').style.display = 'none';
+            }
+        });
+        
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards
+            anime({
+                targets: '.library-card, .training-module, .equipment-card',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: anime.stagger(200),
+                duration: 800,
+                easing: 'easeOutQuart'
+            });
+        });
+    </script>
+</body>
+</html>

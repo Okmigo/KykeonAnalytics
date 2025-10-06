@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Monitoring - Kykeon Analytics</title>
+    <meta name="description" content="Anonymous market monitoring for harm reduction. Detecting adulteration, mislabeling, and novel substances in the recreational drug market.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #0B0D10;
+            --bg-secondary: #1A1D23;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --accent-primary: #5B8CFF;
+            --accent-success: #2FCB89;
+            --accent-warning: #FFB020;
+            --accent-danger: #F46363;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(91, 140, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #4A7CE8 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.3);
+        }
+        
+        .methodology-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(91, 140, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .methodology-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(91, 140, 255, 0.1);
+        }
+        
+        .dashboard-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(47, 203, 137, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-card:hover {
+            border-color: var(--accent-success);
+            box-shadow: 0 5px 20px rgba(47, 203, 137, 0.1);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: rgba(91, 140, 255, 0.2);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .risk-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .risk-high { background-color: var(--accent-danger); }
+        .risk-medium { background-color: var(--accent-warning); }
+        .risk-low { background-color: var(--accent-success); }
+        
+        .chart-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(91, 140, 255, 0.1);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-tab {
+            flex: 1;
+            padding: 12px 24px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+        
+        .filter-tab.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+        
+        .filter-tab:hover:not(.active) {
+            background: rgba(91, 140, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .alert-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .alert-critical {
+            background: rgba(244, 99, 99, 0.2);
+            color: var(--accent-danger);
+            border: 1px solid rgba(244, 99, 99, 0.3);
+        }
+        
+        .alert-warning {
+            background: rgba(255, 176, 32, 0.2);
+            color: var(--accent-warning);
+            border: 1px solid rgba(255, 176, 32, 0.3);
+        }
+        
+        .alert-info {
+            background: rgba(91, 140, 255, 0.2);
+            color: var(--accent-primary);
+            border: 1px solid rgba(91, 140, 255, 0.3);
+        }
+        
+        .geographic-map {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(91, 140, 255, 0.1);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-gradient">Kykeon Analytics</a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">What We Do</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Users</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Organizations</a>
+                            <a href="market-monitoring.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Market Monitoring</a>
+                        </div>
+                    </div>
+                    
+                    <a href="results.html" class="text-gray-300 hover:text-white px-3 py-2">Results</a>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Services</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Sample Testing</a>
+                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Spectral Libraries</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">More</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="about.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">About</a>
+                            <a href="faq.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">FAQ</a>
+                            <a href="blog.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Blog</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-300 hover:text-white px-3 py-2">Contact</button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">General Contact</a>
+                            <a href="contact.html#laboratory" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Laboratory</a>
+                            <a href="contact.html#policy" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Drug Policy</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="results.html" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">RESULTS</a>
+                    <a href="index.html#warnings" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">WARNINGS</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Market <span class="text-gradient">Monitoring</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-4xl mx-auto mb-8">
+                Anonymous market surveillance to detect adulteration, mislabeling, and novel substances. 
+                We purchase samples as normal users to ensure representative quality assessment.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Methodology Overview -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Our Methodology</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Rigorous, anonymous sampling protocols to ensure unbiased market assessment
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <div class="methodology-card p-6">
+                    <div class="text-4xl mb-4">🕵️</div>
+                    <h3 class="text-xl font-bold mb-3">Anonymous Purchasing</h3>
+                    <p class="text-gray-300 text-sm">
+                        All samples purchased anonymously as normal users to avoid vendor bias and ensure representative quality.
+                    </p>
+                </div>
+                
+                <div class="methodology-card p-6">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-xl font-bold mb-3">Strategic Selection</h3>
+                    <p class="text-gray-300 text-sm">
+                        Varied vendor selection including popular markets and obscure sources for comprehensive coverage.
+                    </p>
+                </div>
+                
+                <div class="methodology-card p-6">
+                    <div class="text-4xl mb-4">🚫</div>
+                    <h3 class="text-xl font-bold mb-3">No Vendor Collaboration</h3>
+                    <p class="text-gray-300 text-sm">
+                        Absolutely no collaboration with vendors to maintain independence and avoid conflicts of interest.
+                    </p>
+                </div>
+                
+                <div class="methodology-card p-6">
+                    <div class="text-4xl mb-4">⚗️</div>
+                    <h3 class="text-xl font-bold mb-3">Comprehensive Analysis</h3>
+                    <p class="text-gray-300 text-sm">
+                        Full NMR, LC-MS, and FTIR analysis to identify substances, quantify purity, and detect adulterants.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Detailed Methodology -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Sampling Protocol</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="timeline-item">
+                            <h4 class="font-semibold mb-2">Vendor Selection</h4>
+                            <p class="text-gray-300 text-sm">
+                                We monitor a mixture of popular vendors as well as those selling more obscure products. 
+                                Selection is partly random to avoid systematic bias.
+                            </p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h4 class="font-semibold mb-2">Anonymous Purchase</h4>
+                            <p class="text-gray-300 text-sm">
+                                Samples are purchased using standard consumer accounts and shipping addresses. 
+                                No indication of testing or research purposes.
+                            </p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h4 class="font-semibold mb-2">Sample Processing</h4>
+                            <p class="text-gray-300 text-sm">
+                                Upon receipt, samples are immediately cataloged and prepared for comprehensive 
+                                analytical testing using our full suite of instruments.
+                            </p>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h4 class="font-semibold mb-2">Analysis & Reporting</h4>
+                            <p class="text-gray-300 text-sm">
+                                Complete NMR, LC-MS, and FTIR analysis with detailed reporting of findings, 
+                                including any safety concerns or adulterants detected.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">Quality Assurance</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-red-900/20 p-4 rounded-lg border border-red-500/20">
+                            <h4 class="font-semibold text-red-400 mb-2">No Vendor Bias</h4>
+                            <p class="text-gray-300 text-sm">
+                                We do NOT work with vendors. If vendors want their samples tested and published, 
+                                we will NOT work with them to avoid any conflict of interest.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-blue-900/20 p-4 rounded-lg border border-blue-500/20">
+                            <h4 class="font-semibold text-blue-400 mb-2">Representative Sampling</h4>
+                            <p class="text-gray-300 text-sm">
+                                By purchasing as normal users, we avoid vendors sending their "better" substances 
+                                that aren't representative of what regular customers receive.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-green-900/20 p-4 rounded-lg border border-green-500/20">
+                            <h4 class="font-semibold text-green-400 mb-2">Comprehensive Coverage</h4>
+                            <p class="text-gray-300 text-sm">
+                                Our monitoring includes both popular vendors and obscure sources to provide 
+                                a complete picture of the market landscape.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-purple-900/20 p-4 rounded-lg border border-purple-500/20">
+                            <h4 class="font-semibold text-purple-400 mb-2">Scientific Rigor</h4>
+                            <p class="text-gray-300 text-sm">
+                                All samples undergo the same rigorous analytical protocols using state-of-the-art 
+                                equipment and validated methodologies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Monitoring Dashboard -->
+    <section class="py-20 bg-gray-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Market Intelligence Dashboard</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Real-time insights from our ongoing market surveillance
+                </p>
+            </div>
+            
+            <!-- Dashboard Filters -->
+            <div class="filter-tabs">
+                <div class="filter-tab active" onclick="switchDashboard('overview')">Overview</div>
+                <div class="filter-tab" onclick="switchDashboard('substances')">Substances</div>
+                <div class="filter-tab" onclick="switchDashboard('vendors')">Vendors</div>
+                <div class="filter-tab" onclick="switchDashboard('alerts')">Alerts</div>
+            </div>
+            
+            <!-- Dashboard Content -->
+            <div id="dashboardContent">
+                <!-- Overview Tab -->
+                <div id="overview-dashboard" class="dashboard-section">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="dashboard-card p-6 text-center">
+                            <div class="text-3xl font-bold text-blue-400 mb-2">1,247</div>
+                            <div class="text-sm text-gray-400">Samples Analyzed</div>
+                            <div class="text-xs text-green-400 mt-1">+23 this month</div>
+                        </div>
+                        
+                        <div class="dashboard-card p-6 text-center">
+                            <div class="text-3xl font-bold text-green-400 mb-2">156</div>
+                            <div class="text-sm text-gray-400">Active Vendors</div>
+                            <div class="text-xs text-blue-400 mt-1">12 new vendors</div>
+                        </div>
+                        
+                        <div class="dashboard-card p-6 text-center">
+                            <div class="text-3xl font-bold text-yellow-400 mb-2">89</div>
+                            <div class="text-sm text-gray-400">Novel Substances</div>
+                            <div class="text-xs text-yellow-400 mt-1">+5 this month</div>
+                        </div>
+                        
+                        <div class="dashboard-card p-6 text-center">
+                            <div class="text-3xl font-bold text-red-400 mb-2">34</div>
+                            <div class="text-sm text-gray-400">Critical Alerts</div>
+                            <div class="text-xs text-red-400 mt-1">3 high priority</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="chart-container">
+                            <h3 class="text-xl font-bold mb-4">Substance Categories</h3>
+                            <div id="substanceChart" style="height: 300px;"></div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3 class="text-xl font-bold mb-4">Risk Assessment Trends</h3>
+                            <div id="riskChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Substances Tab -->
+                <div id="substances-dashboard" class="dashboard-section hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <div class="chart-container">
+                                <h3 class="text-xl font-bold mb-4">Most Frequently Detected</h3>
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                        <div>
+                                            <div class="font-semibold">MDMA</div>
+                                            <div class="text-sm text-gray-400">3,4-Methylenedioxymethamphetamine</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-lg font-bold text-blue-400">234</div>
+                                            <div class="text-xs text-gray-500">samples</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                        <div>
+                                            <div class="font-semibold">Cocaine</div>
+                                            <div class="text-sm text-gray-400">Benzoylmethylecgonine</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-lg font-bold text-blue-400">189</div>
+                                            <div class="text-xs text-gray-500">samples</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                        <div>
+                                            <div class="font-semibold">Ketamine</div>
+                                            <div class="text-sm text-gray-400">2-(2-Chlorophenyl)-2-(methylamino)cyclohexanone</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-lg font-bold text-blue-400">156</div>
+                                            <div class="text-xs text-gray-500">samples</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                        <div>
+                                            <div class="font-semibold">2C-B</div>
+                                            <div class="text-sm text-gray-400">4-Bromo-2,5-dimethoxyphenethylamine</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-lg font-bold text-blue-400">89</div>
+                                            <div class="text-xs text-gray-500">samples</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                        <div>
+                                            <div class="font-semibold">LSD</div>
+                                            <div class="text-sm text-gray-400">Lysergic acid diethylamide</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-lg font-bold text-blue-400">67</div>
+                                            <div class="text-xs text-gray-500">samples</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="chart-container mb-6">
+                                <h3 class="text-xl font-bold mb-4">Purity Distribution</h3>
+                                <div id="purityChart" style="height: 250px;"></div>
+                            </div>
+                            
+                            <div class="chart-container">
+                                <h3 class="text-xl font-bold mb-4">Recent Discoveries</h3>
+                                <div class="space-y-3">
+                                    <div class="p-3 bg-gray-800 rounded-lg">
+                                        <div class="font-semibold text-sm">3-MMC</div>
+                                        <div class="text-xs text-gray-400">Sept 15, 2024</div>
+                                        <div class="text-xs text-yellow-400">Novel cathinone</div>
+                                    </div>
+                                    
+                                    <div class="p-3 bg-gray-800 rounded-lg">
+                                        <div class="font-semibold text-sm">4F-MPH</div>
+                                        <div class="text-xs text-gray-400">Sept 12, 2024</div>
+                                        <div class="text-xs text-yellow-400">Fluorinated stimulant</div>
+                                    </div>
+                                    
+                                    <div class="p-3 bg-gray-800 rounded-lg">
+                                        <div class="font-semibold text-sm">Dicloqualone</div>
+                                        <div class="text-xs text-gray-400">Sept 10, 2024</div>
+                                        <div class="text-xs text-red-400">Unknown toxicity</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Vendors Tab -->
+                <div id="vendors-dashboard" class="dashboard-section hidden">
+                    <div class="geographic-map mb-8">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🗺️</div>
+                            <h3 class="text-xl font-bold mb-2">Geographic Distribution</h3>
+                            <p class="text-gray-400">Vendor locations and sample origins</p>
+                            <div class="mt-4 text-sm text-gray-500">Interactive map coming soon</div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3 class="text-xl font-bold mb-4">Vendor Reliability Trends</h3>
+                        <div id="vendorChart" style="height: 300px;"></div>
+                    </div>
+                </div>
+                
+                <!-- Alerts Tab -->
+                <div id="alerts-dashboard" class="dashboard-section hidden">
+                    <div class="space-y-6">
+                        <div class="dashboard-card p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center">
+                                    <span class="risk-indicator risk-high"></span>
+                                    <h3 class="text-lg font-bold">Critical Alert</h3>
+                                </div>
+                                <span class="alert-badge alert-critical">High Priority</span>
+                            </div>
+                            <h4 class="font-semibold mb-2">Fentanyl Adulteration in "MDMA" Samples</h4>
+                            <p class="text-gray-300 text-sm mb-3">
+                                Multiple samples sold as MDMA have tested positive for fentanyl and fentanyl analogs. 
+                                This represents a serious overdose risk.
+                            </p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span>First detected: Sept 15, 2024</span>
+                                <span>15 affected samples</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center">
+                                    <span class="risk-indicator risk-medium"></span>
+                                    <h3 class="text-lg font-bold">Warning Alert</h3>
+                                </div>
+                                <span class="alert-badge alert-warning">Medium Priority</span>
+                            </div>
+                            <h4 class="font-semibold mb-2">Novel Cathinone Detection</h4>
+                            <p class="text-gray-300 text-sm mb-3">
+                                New cathinone derivative 3-MMC detected in multiple samples. Limited toxicity data available.
+                            </p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span>First detected: Sept 12, 2024</span>
+                                <span>8 affected samples</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center">
+                                    <span class="risk-indicator risk-low"></span>
+                                    <h3 class="text-lg font-bold">Information Alert</h3>
+                                </div>
+                                <span class="alert-badge alert-info">Low Priority</span>
+                            </div>
+                            <h4 class="font-semibold mb-2">Seasonal Purity Variations</h4>
+                            <p class="text-gray-300 text-sm mb-3">
+                                Seasonal decrease in MDMA purity observed across multiple vendors. Quality appears to be declining.
+                            </p>
+                            <div class="flex justify-between items-center text-xs text-gray-500">
+                                <span>Reported: Sept 10, 2024</span>
+                                <span>Multiple vendors affected</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Recent Findings -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Recent Findings</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Latest discoveries from our ongoing market surveillance
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold">Novel Substances</h3>
+                    
+                    <div class="card-hover bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg">3-MMC</h4>
+                            <span class="alert-badge alert-warning">New</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            3-Methylmethcathinone detected in 8 samples across 5 vendors. Structural analog of mephedrone with limited toxicity data.
+                        </p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>Risk Level: <span class="text-yellow-400">Medium</span></span>
+                            <span>First detected: Sept 15, 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-hover bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg">4F-MPH</h4>
+                            <span class="alert-badge alert-warning">New</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            4-Fluoromethylphenidate found in 6 samples. Fluorinated analog of methylphenidate with stimulant properties.
+                        </p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>Risk Level: <span class="text-yellow-400">Medium</span></span>
+                            <span>First detected: Sept 12, 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-hover bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg">Dicloqualone</h4>
+                            <span class="alert-badge alert-critical">Danger</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            Novel quinazolinone derivative with unknown toxicity profile. Detected in 3 samples from different vendors.
+                        </p>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>Risk Level: <span class="text-red-400">High</span></span>
+                            <span>First detected: Sept 10, 2024</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold">Adulteration Trends</h3>
+                    
+                    <div class="card-hover bg-red-900/20 p-6 rounded-xl border border-red-500/20">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg text-red-400">Fentanyl Contamination</h4>
+                            <span class="alert-badge alert-critical">Critical</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            Multiple "MDMA" samples contaminated with fentanyl and fentanyl analogs. This represents 
+                            an extremely serious overdose risk. We strongly advise testing all substances.
+                        </p>
+                        <div class="bg-gray-800 p-3 rounded-lg mb-3">
+                            <div class="text-xs text-gray-400 mb-1">Affected Vendors</div>
+                            <div class="text-sm">Vendor A (5 samples), Vendor D (3 samples), Vendor G (2 samples)</div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>15 total affected samples</span>
+                            <span>First detected: Sept 15, 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-hover bg-yellow-900/20 p-6 rounded-xl border border-yellow-500/20">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg text-yellow-400">Purity Decline</h4>
+                            <span class="alert-badge alert-warning">Trending</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            Seasonal decrease in MDMA purity observed across multiple vendors. Average purity dropped 
+                            from 78% to 64% over the past month.
+                        </p>
+                        <div class="bg-gray-800 p-3 rounded-lg mb-3">
+                            <div class="text-xs text-gray-400 mb-1">Most Affected</div>
+                            <div class="text-sm">MDMA, Cocaine, Ketamine</div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>Multiple vendors affected</span>
+                            <span>Trend observed: Sept 2024</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-hover bg-blue-900/20 p-6 rounded-xl border border-blue-500/20">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-lg text-blue-400">Cutting Agents</h4>
+                            <span class="alert-badge alert-info">Update</span>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-3">
+                            Common cutting agents identified: Levamisole in cocaine, MSM in methamphetamine, 
+                            and various research chemicals in ecstasy pills.
+                        </p>
+                        <div class="bg-gray-800 p-3 rounded-lg mb-3">
+                            <div class="text-xs text-gray-400 mb-1">Most Common</div>
+                            <div class="text-sm">Levamisole, MSM, Caffeine, Lidocaine</div>
+                        </div>
+                        <div class="flex justify-between items-center text-xs text-gray-500">
+                            <span>42% of samples affected</span>
+                            <span>Updated: Sept 14, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Alert Subscription -->
+    <section class="py-20 bg-gray-900/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Stay Informed</h2>
+                <p class="text-xl text-gray-300">
+                    Subscribe to receive real-time alerts about dangerous substances and market trends
+                </p>
+            </div>
+            
+            <div class="bg-gray-800/50 rounded-2xl p-8 border border-gray-700">
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Email Address</label>
+                            <input type="email" class="form-input w-full" placeholder="your@email.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Phone Number (Optional)</label>
+                            <input type="tel" class="form-input w-full" placeholder="For SMS alerts">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Alert Preferences</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="w-4 h-4 text-red-600 bg-gray-800 border-gray-600 rounded">
+                                <span class="text-sm">Critical Alerts</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="w-4 h-4 text-yellow-600 bg-gray-800 border-gray-600 rounded">
+                                <span class="text-sm">Warning Alerts</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded">
+                                <span class="text-sm">Information Updates</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Specific Substances of Interest</label>
+                        <textarea class="form-input w-full h-20" placeholder="Optional: List specific substances you want alerts about"></textarea>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded">
+                        <span class="text-sm">I agree to receive harm reduction alerts and understand I can unsubscribe at any time</span>
+                    </div>
+                    
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg text-white font-medium">
+                        Subscribe to Alerts
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-gray-800 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="text-2xl font-bold text-gradient mb-4">Kykeon Analytics</div>
+                    <p class="text-gray-400 mb-4">
+                        A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="services-users.html" class="hover:text-white transition-colors">Sample Testing</a></li>
+                        <li><a href="services-organizations.html" class="hover:text-white transition-colors">Spectral Libraries</a></li>
+                        <li><a href="market-monitoring.html" class="hover:text-white transition-colors">Market Monitoring</a></li>
+                        <li><a href="results.html" class="hover:text-white transition-colors">Results</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="mailto:info@kykeonanalytics.com" class="hover:text-white transition-colors">info@kykeonanalytics.com</a></li>
+                        <li><a href="mailto:office@kykeonanalytics.com" class="hover:text-white transition-colors">office@kykeonanalytics.com</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Form</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Kykeon Analytics. All rights reserved. | <a href="legal.html" class="hover:text-white transition-colors">Privacy Policy & Legal</a></p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Dashboard functionality
+        function switchDashboard(tab) {
+            // Hide all dashboard sections
+            document.querySelectorAll('.dashboard-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section and activate tab
+            document.getElementById(tab + '-dashboard').classList.remove('hidden');
+            event.target.classList.add('active');
+            
+            // Initialize charts for the selected tab
+            initializeCharts(tab);
+        }
+        
+        function initializeCharts(tab) {
+            if (tab === 'overview') {
+                initSubstanceChart();
+                initRiskChart();
+            } else if (tab === 'substances') {
+                initPurityChart();
+            } else if (tab === 'vendors') {
+                initVendorChart();
+            }
+        }
+        
+        function initSubstanceChart() {
+            const chart = echarts.init(document.getElementById('substanceChart'));
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: '#1A1D23',
+                    borderColor: '#5B8CFF',
+                    textStyle: { color: '#FFFFFF' }
+                },
+                series: [{
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    data: [
+                        { value: 35, name: 'Stimulants', itemStyle: { color: '#5B8CFF' } },
+                        { value: 28, name: 'Psychedelics', itemStyle: { color: '#2FCB89' } },
+                        { value: 18, name: 'Opioids', itemStyle: { color: '#FFB020' } },
+                        { value: 12, name: 'Dissociatives', itemStyle: { color: '#F46363' } },
+                        { value: 7, name: 'Other', itemStyle: { color: '#A0AEC0' } }
+                    ],
+                    label: {
+                        color: '#FFFFFF',
+                        fontSize: 12
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        function initRiskChart() {
+            const chart = echarts.init(document.getElementById('riskChart'));
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: '#1A1D23',
+                    borderColor: '#5B8CFF',
+                    textStyle: { color: '#FFFFFF' }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                    axisLine: { lineStyle: { color: '#A0AEC0' } },
+                    axisLabel: { color: '#A0AEC0' }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: { lineStyle: { color: '#A0AEC0' } },
+                    axisLabel: { color: '#A0AEC0' },
+                    splitLine: { lineStyle: { color: '#2D3748' } }
+                },
+                series: [
+                    {
+                        name: 'High Risk',
+                        type: 'line',
+                        data: [12, 15, 18, 22, 19, 25, 28, 31, 34],
+                        itemStyle: { color: '#F46363' },
+                        lineStyle: { color: '#F46363' }
+                    },
+                    {
+                        name: 'Medium Risk',
+                        type: 'line',
+                        data: [25, 28, 32, 35, 38, 42, 45, 48, 52],
+                        itemStyle: { color: '#FFB020' },
+                        lineStyle: { color: '#FFB020' }
+                    },
+                    {
+                        name: 'Low Risk',
+                        type: 'line',
+                        data: [45, 48, 52, 55, 58, 62, 65, 68, 72],
+                        itemStyle: { color: '#2FCB89' },
+                        lineStyle: { color: '#2FCB89' }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        function initPurityChart() {
+            const chart = echarts.init(document.getElementById('purityChart'));
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'item',
+                    backgroundColor: '#1A1D23',
+                    borderColor: '#5B8CFF',
+                    textStyle: { color: '#FFFFFF' }
+                },
+                series: [{
+                    type: 'pie',
+                    radius: '70%',
+                    data: [
+                        { value: 45, name: '80-100%', itemStyle: { color: '#2FCB89' } },
+                        { value: 28, name: '60-80%', itemStyle: { color: '#FFB020' } },
+                        { value: 18, name: '40-60%', itemStyle: { color: '#F46363' } },
+                        { value: 9, name: '<40%', itemStyle: { color: '#A0AEC0' } }
+                    ],
+                    label: {
+                        color: '#FFFFFF',
+                        fontSize: 10
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        function initVendorChart() {
+            const chart = echarts.init(document.getElementById('vendorChart'));
+            
+            const option = {
+                backgroundColor: 'transparent',
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: '#1A1D23',
+                    borderColor: '#5B8CFF',
+                    textStyle: { color: '#FFFFFF' }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Vendor A', 'Vendor B', 'Vendor C', 'Vendor D', 'Vendor E', 'Vendor F'],
+                    axisLine: { lineStyle: { color: '#A0AEC0' } },
+                    axisLabel: { color: '#A0AEC0', rotate: 45 }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: { lineStyle: { color: '#A0AEC0' } },
+                    axisLabel: { color: '#A0AEC0' },
+                    splitLine: { lineStyle: { color: '#2D3748' } }
+                },
+                series: [{
+                    name: 'Reliability Score',
+                    type: 'bar',
+                    data: [85, 72, 91, 68, 89, 76],
+                    itemStyle: {
+                        color: function(params) {
+                            const colors = ['#F46363', '#FFB020', '#2FCB89'];
+                            return colors[Math.floor(params.value / 35)];
+                        }
+                    }
+                }]
+            };
+            
+            chart.setOption(option);
+        }
+        
+        // Initialize overview charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initSubstanceChart();
+            initRiskChart();
+            
+            // Animate cards
+            anime({
+                targets: '.methodology-card, .dashboard-card',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                delay: anime.stagger(200),
+                duration: 800,
+                easing: 'easeOutQuart'
+            });
+        });
+        
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for subscribing to our market monitoring alerts! You will receive a confirmation email shortly.');
+        });
+    </script>
+</body>
+</html>

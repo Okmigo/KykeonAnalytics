@@ -14,228 +14,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     
-    <style>
-        :root {
-            --bg-primary: #0B0D10;
-            --bg-secondary: #1A1D23;
-            --text-primary: #FFFFFF;
-            --text-secondary: #A0AEC0;
-            --accent-primary: #5B8CFF;
-            --accent-success: #2FCB89;
-            --accent-warning: #FFB020;
-            --accent-danger: #F46363;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-success) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(91, 140, 255, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, #4A7CE8 100%);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.3);
-        }
-        
-        .team-card {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(91, 140, 255, 0.1);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .team-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 10px 40px rgba(91, 140, 255, 0.1);
-        }
-        
-        .equipment-card {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(47, 203, 137, 0.1);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .equipment-card:hover {
-            border-color: var(--accent-success);
-            box-shadow: 0 10px 40px rgba(47, 203, 137, 0.1);
-        }
-        
-        .timeline-item {
-            position: relative;
-            padding-left: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0.5rem;
-            width: 12px;
-            height: 12px;
-            background: var(--accent-primary);
-            border-radius: 50%;
-        }
-        
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 1.5rem;
-            width: 2px;
-            height: calc(100% + 1rem);
-            background: rgba(91, 140, 255, 0.2);
-        }
-        
-        .timeline-item:last-child::after {
-            display: none;
-        }
-        
-        .certification-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            background: rgba(47, 203, 137, 0.2);
-            color: var(--accent-success);
-            border: 1px solid rgba(47, 203, 137, 0.3);
-        }
-        
-        .stats-card {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(91, 140, 255, 0.1);
-            border-radius: 12px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-        
-        .stats-card:hover {
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
-        }
-        
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .gallery-item {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(91, 140, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .gallery-item:hover {
-            border-color: var(--accent-primary);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.1);
-        }
-        
-        .gallery-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: linear-gradient(45deg, #1A1D23, #2D3748);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+
 </head>
-<body>
+<body id="top">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="index.html" class="text-2xl font-bold text-gradient">Kykeon Analytics</a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <div class="relative group">
-                        <button class="text-gray-300 hover:text-white px-3 py-2">What We Do</button>
-                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Users</a>
-                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Organizations</a>
-                            <a href="market-monitoring.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Market Monitoring</a>
-                        </div>
-                    </div>
-                    
-                    <a href="results.html" class="text-gray-300 hover:text-white px-3 py-2">Results</a>
-                    
-                    <div class="relative group">
-                        <button class="text-gray-300 hover:text-white px-3 py-2">Services</button>
-                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Sample Testing</a>
-                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Spectral Libraries</a>
-                        </div>
-                    </div>
-                    
-                    <div class="relative group">
-                        <button class="text-blue-400 hover:text-blue-300 px-3 py-2 font-medium">More</button>
-                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                            <a href="about.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">About</a>
-                            <a href="faq.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">FAQ</a>
-                            <a href="blog.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Blog</a>
-                        </div>
-                    </div>
-                    
-                    <div class="relative group">
-                        <button class="text-gray-300 hover:text-white px-3 py-2">Contact</button>
-                        <div class="absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
-                            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">General Contact</a>
-                            <a href="contact.html#laboratory" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Laboratory</a>
-                            <a href="contact.html#policy" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Drug Policy</a>
-                        </div>
+            <nav class="global-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brandmark text-gradient">Kykeon Analytics</a>
+            <div class="nav-links hidden md:flex">
+                <div class="relative group">
+                    <button>What We Do</button>
+                    <div class="dropdown">
+                        <a href="services-users.html">For Users</a>
+                        <a href="services-organizations.html">For Organizations</a>
+                        <a href="market-monitoring.html">Market Monitoring</a>
                     </div>
                 </div>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="results.html" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">RESULTS</a>
-                    <a href="index.html#warnings" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">WARNINGS</a>
+                <a href="results.html">Results</a>
+                <div class="relative group">
+                    <button>Services</button>
+                    <div class="dropdown">
+                        <a href="services-users.html">Sample Testing</a>
+                        <a href="services-organizations.html">Spectral Libraries</a>
+                    </div>
                 </div>
+                <div class="relative group">
+                    <button>More</button>
+                    <div class="dropdown">
+                        <a href="about.html">About</a>
+                        <a href="faq.html">FAQ</a>
+                        <a href="blog.html">Blog</a>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <button>Contact</button>
+                    <div class="dropdown">
+                        <a href="contact.html">General Contact</a>
+                        <a href="contact.html#laboratory">Laboratory</a>
+                        <a href="contact.html#policy">Drug Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-cta">
+                <a href="results.html" class="primary">Results</a>
+                <a href="#top" class="btn-secondary">Explore</a>
             </div>
         </div>
     </nav>
@@ -808,46 +631,67 @@
     </section>
     
     <!-- Footer -->
-    <footer class="bg-black/50 border-t border-gray-800 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <div class="text-2xl font-bold text-gradient mb-4">Kykeon Analytics</div>
-                    <p class="text-gray-400 mb-4">
-                        A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.
-                    </p>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Services</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="services-users.html" class="hover:text-white transition-colors">Sample Testing</a></li>
-                        <li><a href="services-organizations.html" class="hover:text-white transition-colors">Spectral Libraries</a></li>
-                        <li><a href="market-monitoring.html" class="hover:text-white transition-colors">Market Monitoring</a></li>
-                        <li><a href="results.html" class="hover:text-white transition-colors">Results</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="mailto:info@kykeonanalytics.com" class="hover:text-white transition-colors">info@kykeonanalytics.com</a></li>
-                        <li><a href="mailto:office@kykeonanalytics.com" class="hover:text-white transition-colors">office@kykeonanalytics.com</a></li>
-                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Form</a></li>
-                    </ul>
-                </div>
+            <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="brandmark text-gradient mb-4">Kykeon Analytics</div>
+                <p class="footer-meta mb-4">A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.</p>
+                <p class="footer-meta">Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.</p>
             </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Kykeon Analytics. All rights reserved. | <a href="legal.html" class="hover:text-white transition-colors">Privacy Policy & Legal</a></p>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Services</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="services-users.html">Sample Testing</a></li>
+                    <li><a href="services-organizations.html">Spectral Libraries</a></li>
+                    <li><a href="market-monitoring.html">Market Monitoring</a></li>
+                    <li><a href="results.html">Results</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="legal.html">Privacy &amp; Legal</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="mailto:info@kykeonanalytics.com">info@kykeonanalytics.com</a></li>
+                    <li><a href="mailto:office@kykeonanalytics.com">office@kykeonanalytics.com</a></li>
+                    <li><a href="contact.html">Contact Form</a></li>
+                </ul>
             </div>
         </div>
+        <div class="footer-bottom">&copy; 2024 Kykeon Analytics. All rights reserved.</div>
     </footer>
     
-    <script>
+    
+
+    <div class="chatbot-widget">
+        <div class="chatbot-window" id="chatbotWindow" aria-hidden="true">
+            <div class="chatbot-header">
+                <div>
+                    <h3 class="text-lg font-semibold">Kykeon Virtual Assistant</h3>
+                    <p class="text-sm text-gray-300">Ask anything about our testing, libraries, or warnings.</p>
+                </div>
+                <button class="text-gray-300 hover:text-white" data-chatbot-close>&times;</button>
+            </div>
+            <div class="chatbot-body">
+                <div class="chatbot-message">This assistant can guide you through our services and connect you with the right resources. Start by typing a question below.</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" placeholder="Type your message..." aria-label="Chatbot message input" disabled>
+                <button disabled>Send</button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" aria-expanded="false" aria-controls="chatbotWindow" data-chatbot-toggle>💬</button>
+    </div>
+
+    <script src="ui.js"></script>
+<script>
         // Initialize animations
         document.addEventListener('DOMContentLoaded', function() {
             // Animate team cards

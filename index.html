@@ -5,495 +5,321 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kykeon Analytics - Harm Reduction Analysis</title>
     <meta name="description" content="Kykeon Analytics provides analytical solutions for harm reduction in the field of newly emerging chemical entities. We offer substance testing, spectral libraries, and market monitoring.">
-    
-    <!-- Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
-    <!-- Core Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    
-    <style>
-        :root {
-            --bg-primary: #0B0D10;
-            --bg-secondary: #1A1D23;
-            --text-primary: #FFFFFF;
-            --text-secondary: #A0AEC0;
-            --accent-primary: #5B8CFF;
-            --accent-success: #2FCB89;
-            --accent-warning: #FFB020;
-            --accent-danger: #F46363;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .bg-gradient-primary {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-        }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-success) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(91, 140, 255, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, #4A7CE8 100%);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(91, 140, 255, 0.3);
-        }
-        
-        .data-table {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(91, 140, 255, 0.1);
-        }
-        
-        .table-header {
-            background: rgba(91, 140, 255, 0.1);
-            border-bottom: 1px solid rgba(91, 140, 255, 0.2);
-        }
-        
-        .table-row:hover {
-            background: rgba(91, 140, 255, 0.05);
-        }
-        
-        .risk-high { color: var(--accent-danger); }
-        .risk-medium { color: var(--accent-warning); }
-        .risk-low { color: var(--accent-success); }
-        
-        #particles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.3;
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 10;
-        }
-        
-        .nav-link {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--accent-primary);
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-primary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .dropdown {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-        
-        .dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .filter-input {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(91, 140, 255, 0.2);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-        
-        .filter-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(91, 140, 255, 0.1);
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .status-danger {
-            background: rgba(244, 99, 99, 0.2);
-            color: var(--accent-danger);
-            border: 1px solid rgba(244, 99, 99, 0.3);
-        }
-        
-        .status-warning {
-            background: rgba(255, 176, 32, 0.2);
-            color: var(--accent-warning);
-            border: 1px solid rgba(255, 176, 32, 0.3);
-        }
-        
-        .status-safe {
-            background: rgba(47, 203, 137, 0.2);
-            color: var(--accent-success);
-            border: 1px solid rgba(47, 203, 137, 0.3);
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <!-- Particle Background -->
+<body id="top">
     <div id="particles-container"></div>
-    
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <div class="text-2xl font-bold text-gradient">Kykeon Analytics</div>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-8">
-                    <div class="relative group">
-                        <button class="nav-link text-gray-300 hover:text-white px-3 py-2">What We Do</button>
-                        <div class="dropdown absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2">
-                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Users</a>
-                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">For Organizations</a>
-                            <a href="market-monitoring.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Market Monitoring</a>
-                        </div>
-                    </div>
-                    
-                    <a href="results.html" class="nav-link text-gray-300 hover:text-white px-3 py-2">Results</a>
-                    
-                    <div class="relative group">
-                        <button class="nav-link text-gray-300 hover:text-white px-3 py-2">Services</button>
-                        <div class="dropdown absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2">
-                            <a href="services-users.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Sample Testing</a>
-                            <a href="services-organizations.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Spectral Libraries</a>
-                        </div>
-                    </div>
-                    
-                    <div class="relative group">
-                        <button class="nav-link text-gray-300 hover:text-white px-3 py-2">More</button>
-                        <div class="dropdown absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2">
-                            <a href="about.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">About</a>
-                            <a href="faq.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">FAQ</a>
-                            <a href="blog.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Blog</a>
-                        </div>
-                    </div>
-                    
-                    <div class="relative group">
-                        <button class="nav-link text-gray-300 hover:text-white px-3 py-2">Contact</button>
-                        <div class="dropdown absolute top-full left-0 mt-2 w-48 bg-gray-900 rounded-lg shadow-lg py-2">
-                            <a href="contact.html" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">General Contact</a>
-                            <a href="contact.html#laboratory" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Laboratory</a>
-                            <a href="contact.html#policy" class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800">Drug Policy</a>
-                        </div>
+
+    <nav class="global-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brandmark text-gradient">Kykeon Analytics</a>
+
+            <div class="nav-links hidden md:flex">
+                <div class="relative group">
+                    <button>What We Do</button>
+                    <div class="dropdown">
+                        <a href="services-users.html">For Users</a>
+                        <a href="services-organizations.html">For Organizations</a>
+                        <a href="market-monitoring.html">Market Monitoring</a>
                     </div>
                 </div>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="results.html" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">RESULTS</a>
-                    <a href="#warnings" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg text-white font-medium transition-colors">WARNINGS</a>
+                <a href="results.html">Results</a>
+                <div class="relative group">
+                    <button>Services</button>
+                    <div class="dropdown">
+                        <a href="services-users.html">Sample Testing</a>
+                        <a href="services-organizations.html">Spectral Libraries</a>
+                    </div>
                 </div>
+                <div class="relative group">
+                    <button>More</button>
+                    <div class="dropdown">
+                        <a href="about.html">About</a>
+                        <a href="faq.html">FAQ</a>
+                        <a href="blog.html">Blog</a>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <button>Contact</button>
+                    <div class="dropdown">
+                        <a href="contact.html">General Contact</a>
+                        <a href="contact.html#laboratory">Laboratory</a>
+                        <a href="contact.html#policy">Drug Policy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-cta">
+                <a href="results.html" class="primary">Results</a>
+                <a href="#warnings" class="btn-secondary">Warnings</a>
             </div>
         </div>
     </nav>
-    
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-16">
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-blue-900/20"></div>
-        <div class="absolute inset-0">
-            <img src="resources/hero-lab.png" alt="Modern analytical chemistry laboratory" class="w-full h-full object-cover opacity-30">
-        </div>
-        
-        <div class="hero-content max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6">
-                <span class="text-gradient" id="typed-headline"></span>
-            </h1>
-            
-            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-                Kykeon Analytics is a public service initiative that provides analytical solutions for harm reduction in the field of newly emerging chemical entities. We work with users and organizations to create Spectral Libraries that provide researchers and organizations with the tools they need to save lives and advance science, free of charge.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <a href="services-users.html" class="btn-primary px-8 py-4 rounded-lg text-white font-semibold text-lg">
-                    Get Testing Services
-                </a>
-                <a href="services-organizations.html" class="border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
-                    Access Spectral Libraries
-                </a>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="card-hover bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700">
-                    <div class="text-3xl mb-4">🔬</div>
-                    <h3 class="text-xl font-semibold mb-3">For Users</h3>
-                    <p class="text-gray-300">Substance analysis service with NMR, LC-MS, and FTIR techniques for competitive prices.</p>
-                </div>
-                
-                <div class="card-hover bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700">
-                    <div class="text-3xl mb-4">🏢</div>
-                    <h3 class="text-xl font-semibold mb-3">For Organizations</h3>
-                    <p class="text-gray-300">Spectral libraries, training, and tools for harm reduction workers and researchers.</p>
-                </div>
-                
-                <div class="card-hover bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl border border-gray-700">
-                    <div class="text-3xl mb-4">🛡️</div>
-                    <h3 class="text-xl font-semibold mb-3">For Community</h3>
-                    <p class="text-gray-300">Market monitoring and anonymous testing to detect adulteration and novel substances.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Warnings Section -->
-    <section id="warnings" class="py-20 bg-gray-900/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-4">Recent Warnings</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Our ongoing market monitoring detects and analyzes new substances, adding them to spectral databases. 
-                    We test unscheduled chemical entities to find potential adulterants, promoting public safety.
-                </p>
-            </div>
-            
-            <!-- Filters -->
-            <div class="mb-8 flex flex-wrap gap-4">
-                <input type="text" id="substanceFilter" placeholder="Filter by substance name..." class="filter-input flex-1 min-w-0">
-                <select id="riskFilter" class="filter-input">
-                    <option value="">All Risk Levels</option>
-                    <option value="high">High Risk</option>
-                    <option value="medium">Medium Risk</option>
-                    <option value="low">Low Risk</option>
-                </select>
-                <input type="date" id="dateFilter" class="filter-input">
-                <button onclick="clearFilters()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">Clear</button>
-            </div>
-            
-            <!-- Data Table -->
-            <div class="data-table">
-                <div class="table-header p-4">
-                    <div class="grid grid-cols-12 gap-4 text-sm font-semibold text-gray-300">
-                        <div class="col-span-3">Substance</div>
-                        <div class="col-span-2">Source</div>
-                        <div class="col-span-2">Date</div>
-                        <div class="col-span-3">Analysis</div>
-                        <div class="col-span-2">Safety</div>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-grid">
+                <div class="hero-intro">
+                    <span class="category-badge category-research">Public service laboratory</span>
+                    <h1>
+                        <span class="text-gradient" id="typed-headline"></span>
+                    </h1>
+                    <p>
+                        Kykeon Analytics is a public service initiative that provides analytical solutions for harm reduction in the field of newly emerging chemical entities. We work with users and organizations to create Spectral Libraries that provide researchers and organizations with the tools they need to save lives and advance science, free of charge.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="services-users.html" class="btn-primary">Get Testing Services</a>
+                        <a href="services-organizations.html" class="btn-secondary">Access Spectral Libraries</a>
+                        <a href="market-monitoring.html" class="btn-secondary">Market Monitoring</a>
+                    </div>
+                    <div class="stat-tiles">
+                        <div class="stat-tile">
+                            <strong>ISO-Calibrated</strong>
+                            <span class="text-sm text-gray-300">NMR, LC-MS, and FTIR instrumentation operated in Catalonia.</span>
+                        </div>
+                        <div class="stat-tile">
+                            <strong>Open Science</strong>
+                            <span class="text-sm text-gray-300">Creative Commons licensed spectral libraries and transparent reporting.</span>
+                        </div>
+                        <div class="stat-tile">
+                            <strong>Safety First</strong>
+                            <span class="text-sm text-gray-300">Market monitoring and rapid warnings to protect the community.</span>
+                        </div>
                     </div>
                 </div>
-                
-                <div id="warningsTable" class="divide-y divide-gray-700">
-                    <!-- Table rows will be populated by JavaScript -->
+
+                <div class="hero-stats">
+                    <div class="hero-card">
+                        <h3>For Users</h3>
+                        <p>Substance analysis service with NMR, LC-MS, and FTIR techniques for competitive prices.</p>
+                        <ul class="space-y-2 text-sm text-gray-300 mt-4">
+                            <li>• Qualitative testing from €20</li>
+                            <li>• Full quantitative analysis from €80</li>
+                            <li>• Plant and mushroom testing €100</li>
+                            <li>• Multiple payment methods accepted</li>
+                        </ul>
+                    </div>
+                    <div class="hero-card">
+                        <h3>For Organizations</h3>
+                        <p>Spectral libraries, training, and tools for harm reduction workers and researchers.</p>
+                        <ul class="space-y-2 text-sm text-gray-300 mt-4">
+                            <li>• Free spectral libraries (FTIR &amp; NMR)</li>
+                            <li>• In-person and online training</li>
+                            <li>• Equipment advisory services</li>
+                            <li>• Creative Commons licensed data</li>
+                        </ul>
+                    </div>
+                    <div class="hero-card">
+                        <h3>For Community</h3>
+                        <p>Market monitoring and anonymous testing to detect adulteration and novel substances.</p>
+                        <ul class="space-y-2 text-sm text-gray-300 mt-4">
+                            <li>• Anonymous vendor monitoring</li>
+                            <li>• Real-time danger alerts</li>
+                            <li>• Novel substance detection</li>
+                            <li>• Public safety warnings</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            
-            <div class="mt-8 text-center">
-                <a href="market-monitoring.html" class="btn-primary px-8 py-4 rounded-lg text-white font-semibold">
-                    View Full Market Monitoring Data
-                </a>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Services Overview -->
-    <section class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Our Services</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Comprehensive harm reduction solutions for individuals, organizations, and the community
+        </section>
+
+        <section id="warnings" class="section-shell alt">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-heading text-gradient">Recent Warnings</h2>
+                <p class="section-subheading">
+                    Our ongoing market monitoring detects and analyzes new substances, adding them to spectral databases.
+                    We test unscheduled chemical entities to find potential adulterants, promoting public safety.
                 </p>
+
+                <div class="mb-10 flex flex-wrap gap-4">
+                    <input type="text" id="substanceFilter" placeholder="Filter by substance name..." class="filter-input flex-1 min-w-0">
+                    <select id="riskFilter" class="filter-input">
+                        <option value="">All Risk Levels</option>
+                        <option value="high">High Risk</option>
+                        <option value="medium">Medium Risk</option>
+                        <option value="low">Low Risk</option>
+                    </select>
+                    <input type="date" id="dateFilter" class="filter-input">
+                    <button onclick="clearFilters()" class="btn-secondary">Clear</button>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header p-5">
+                        <div class="grid grid-cols-12 gap-4 text-sm font-semibold text-gray-300">
+                            <div class="col-span-3">Substance</div>
+                            <div class="col-span-2">Source</div>
+                            <div class="col-span-2">Date</div>
+                            <div class="col-span-3">Analysis</div>
+                            <div class="col-span-2">Safety</div>
+                        </div>
+                    </div>
+                    <div id="warningsTable" class="divide-y divide-gray-800"></div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <a href="market-monitoring.html" class="btn-primary">View Full Market Monitoring Data</a>
+                </div>
             </div>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Individual Users -->
-                <div class="card-hover bg-gradient-to-br from-blue-900/20 to-gray-800 p-8 rounded-2xl border border-blue-500/20">
-                    <div class="text-4xl mb-6">👤</div>
-                    <h3 class="text-2xl font-bold mb-4">For Users</h3>
-                    <p class="text-gray-300 mb-6">
-                        Through NMR, LC-MS and FTIR techniques, we identify and quantify compounds in your sample for competitive prices. 
-                        Detailed reports and spectra provided.
-                    </p>
-                    <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                        <li>• Qualitative testing from €20</li>
-                        <li>• Full quantitative analysis from €80</li>
-                        <li>• Plant and mushroom testing €100</li>
-                        <li>• Multiple payment methods accepted</li>
-                    </ul>
-                    <a href="services-users.html" class="btn-primary w-full py-3 rounded-lg text-center block">
-                        Get Testing Services
-                    </a>
+        </section>
+
+        <section class="section-shell">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-heading text-gradient">Our Services</h2>
+                <p class="section-subheading">Comprehensive harm reduction solutions for individuals, organizations, and the community.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="pricing-card">
+                        <div class="text-4xl mb-4">👤</div>
+                        <h3 class="text-2xl font-bold mb-3">For Users</h3>
+                        <p class="text-gray-300 mb-6">
+                            Through NMR, LC-MS and FTIR techniques, we identify and quantify compounds in your sample for competitive prices.
+                            Detailed reports and spectra provided.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
+                            <li>• Qualitative testing from €20</li>
+                            <li>• Full quantitative analysis from €80</li>
+                            <li>• Plant and mushroom testing €100</li>
+                            <li>• Multiple payment methods accepted</li>
+                        </ul>
+                        <a href="services-users.html" class="btn-primary w-full justify-center">Get Testing Services</a>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <div class="text-4xl mb-4">🏛️</div>
+                        <h3 class="text-2xl font-bold mb-3">For Organizations</h3>
+                        <p class="text-gray-300 mb-6">
+                            We provide FTIR and NMR spectral libraries free of charge under Creative Commons license.
+                            Training and tools for harm reduction workers.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-200 mb-6">
+                            <li>• Free spectral libraries (FTIR &amp; NMR)</li>
+                            <li>• In-person and online training</li>
+                            <li>• Equipment advisory services</li>
+                            <li>• Creative Commons licensed data</li>
+                        </ul>
+                        <a href="services-organizations.html" class="btn-primary w-full justify-center">Access Libraries</a>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="text-4xl mb-4">🌍</div>
+                        <h3 class="text-2xl font-bold mb-3">For Community</h3>
+                        <p class="text-gray-300 mb-6">
+                            Anonymous market monitoring to detect adulteration, mislabeling and novel substances.
+                            Publishing warnings when dangerous substances are found.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-400 mb-6">
+                            <li>• Anonymous vendor monitoring</li>
+                            <li>• Real-time danger alerts</li>
+                            <li>• Novel substance detection</li>
+                            <li>• Public safety warnings</li>
+                        </ul>
+                        <a href="market-monitoring.html" class="btn-primary w-full justify-center">View Monitoring Data</a>
+                    </div>
                 </div>
-                
-                <!-- Organizations -->
-                <div class="card-hover bg-gradient-to-br from-green-900/20 to-gray-800 p-8 rounded-2xl border border-green-500/20">
-                    <div class="text-4xl mb-6">🏛️</div>
-                    <h3 class="text-2xl font-bold mb-4">For Organizations</h3>
-                    <p class="text-gray-300 mb-6">
-                        We provide FTIR and NMR spectral libraries free of charge under Creative Commons license. 
-                        Training and tools for harm reduction workers.
-                    </p>
-                    <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                        <li>• Free spectral libraries (FTIR & NMR)</li>
-                        <li>• In-person and online training</li>
-                        <li>• Equipment advisory services</li>
-                        <li>• Creative Commons licensed data</li>
-                    </ul>
-                    <a href="services-organizations.html" class="bg-green-600 hover:bg-green-700 w-full py-3 rounded-lg text-center block transition-colors">
-                        Access Libraries
-                    </a>
+            </div>
+        </section>
+
+        <section class="section-shell alt">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-heading text-gradient">Scientific Excellence</h2>
+                <p class="section-subheading">State-of-the-art equipment and methodologies.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="stats-card text-center">
+                        <div class="text-4xl mb-3">🔬</div>
+                        <h3 class="text-xl font-semibold mb-2">NMR Spectroscopy</h3>
+                        <p class="text-gray-400 text-sm">Nanalysis Pro100MHz for 1D and 2D experiments.</p>
+                    </div>
+                    <div class="stats-card text-center">
+                        <div class="text-4xl mb-3">⚗️</div>
+                        <h3 class="text-xl font-semibold mb-2">LC-MS Analysis</h3>
+                        <p class="text-gray-400 text-sm">Agilent triple-quadrupole LC-MS system.</p>
+                    </div>
+                    <div class="stats-card text-center">
+                        <div class="text-4xl mb-3">📡</div>
+                        <h3 class="text-xl font-semibold mb-2">FTIR Spectrometry</h3>
+                        <p class="text-gray-400 text-sm">Nicolet IS5 and IS10 FTIR spectrometers.</p>
+                    </div>
+                    <div class="stats-card text-center">
+                        <div class="text-4xl mb-3">🔒</div>
+                        <h3 class="text-xl font-semibold mb-2">Anonymous Testing</h3>
+                        <p class="text-gray-400 text-sm">No vendor collaboration, pure research.</p>
+                    </div>
                 </div>
-                
-                <!-- Community -->
-                <div class="card-hover bg-gradient-to-br from-purple-900/20 to-gray-800 p-8 rounded-2xl border border-purple-500/20">
-                    <div class="text-4xl mb-6">🌍</div>
-                    <h3 class="text-2xl font-bold mb-4">For Community</h3>
-                    <p class="text-gray-300 mb-6">
-                        Anonymous market monitoring to detect adulteration, mislabeling and novel substances. 
-                        Publishing warnings when dangerous substances are found.
-                    </p>
-                    <ul class="space-y-2 text-sm text-gray-400 mb-6">
-                        <li>• Anonymous vendor monitoring</li>
-                        <li>• Real-time danger alerts</li>
-                        <li>• Novel substance detection</li>
-                        <li>• Public safety warnings</li>
-                    </ul>
-                    <a href="market-monitoring.html" class="bg-purple-600 hover:bg-purple-700 w-full py-3 rounded-lg text-center block transition-colors">
-                        View Monitoring Data
-                    </a>
-                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="brandmark text-gradient mb-4">Kykeon Analytics</div>
+                <p class="footer-meta mb-4">
+                    A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
+                </p>
+                <p class="footer-meta">Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Services</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="services-users.html">Sample Testing</a></li>
+                    <li><a href="services-organizations.html">Spectral Libraries</a></li>
+                    <li><a href="market-monitoring.html">Market Monitoring</a></li>
+                    <li><a href="results.html">Results</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="legal.html">Privacy &amp; Legal</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                <ul class="space-y-3 footer-meta">
+                    <li><a href="mailto:info@kykeonanalytics.com">info@kykeonanalytics.com</a></li>
+                    <li><a href="mailto:office@kykeonanalytics.com">office@kykeonanalytics.com</a></li>
+                    <li><a href="contact.html">Contact Form</a></li>
+                </ul>
             </div>
         </div>
-    </section>
-    
-    <!-- Trust Signals -->
-    <section class="py-20 bg-gray-900/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Scientific Excellence</h2>
-                <p class="text-xl text-gray-300">State-of-the-art equipment and methodologies</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="text-4xl mb-4">🔬</div>
-                    <h3 class="text-xl font-semibold mb-2">NMR Spectroscopy</h3>
-                    <p class="text-gray-400 text-sm">Nanalysis Pro100MHz for 1D and 2D experiments</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-4xl mb-4">⚗️</div>
-                    <h3 class="text-xl font-semibold mb-2">LC-MS Analysis</h3>
-                    <p class="text-gray-400 text-sm">Agilent triple-quadrupole LC-MS system</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-4xl mb-4">📡</div>
-                    <h3 class="text-xl font-semibold mb-2">FTIR Spectrometry</h3>
-                    <p class="text-gray-400 text-sm">Nicolet IS5 and IS10 FTIR spectrometers</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-4xl mb-4">🔒</div>
-                    <h3 class="text-xl font-semibold mb-2">Anonymous Testing</h3>
-                    <p class="text-gray-400 text-sm">No vendor collaboration, pure research</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="bg-black/50 border-t border-gray-800 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="col-span-2">
-                    <div class="text-2xl font-bold text-gradient mb-4">Kykeon Analytics</div>
-                    <p class="text-gray-400 mb-4">
-                        A public service initiative providing analytical solutions for harm reduction in the field of newly emerging chemical entities.
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        Located in Catalonia, equipped with state-of-the-art analytical chemistry technology.
-                    </p>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Services</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="services-users.html" class="hover:text-white transition-colors">Sample Testing</a></li>
-                        <li><a href="services-organizations.html" class="hover:text-white transition-colors">Spectral Libraries</a></li>
-                        <li><a href="market-monitoring.html" class="hover:text-white transition-colors">Market Monitoring</a></li>
-                        <li><a href="results.html" class="hover:text-white transition-colors">Results</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="mailto:info@kykeonanalytics.com" class="hover:text-white transition-colors">info@kykeonanalytics.com</a></li>
-                        <li><a href="mailto:office@kykeonanalytics.com" class="hover:text-white transition-colors">office@kykeonanalytics.com</a></li>
-                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact Form</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Kykeon Analytics. All rights reserved. | <a href="legal.html" class="hover:text-white transition-colors">Privacy Policy & Legal</a></p>
-            </div>
+        <div class="footer-bottom">
+            &copy; 2024 Kykeon Analytics. All rights reserved.
         </div>
     </footer>
-    
+
+    <div class="chatbot-widget">
+        <div class="chatbot-window" id="chatbotWindow" aria-hidden="true">
+            <div class="chatbot-header">
+                <div>
+                    <h3 class="text-lg font-semibold">Kykeon Virtual Assistant</h3>
+                    <p class="text-sm text-gray-300">Ask anything about our testing, libraries, or warnings.</p>
+                </div>
+                <button class="text-gray-300 hover:text-white" data-chatbot-close>&times;</button>
+            </div>
+            <div class="chatbot-body">
+                <div class="chatbot-message">This assistant can guide you through our services and connect you with the right resources. Start by typing a question below.</div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" placeholder="Type your message..." aria-label="Chatbot message input" disabled>
+                <button disabled>Send</button>
+            </div>
+        </div>
+        <button class="chatbot-toggle" aria-expanded="false" aria-controls="chatbotWindow" data-chatbot-toggle>💬</button>
+    </div>
+
     <script src="main.js"></script>
+    <script src="ui.js"></script>
 </body>
 </html>

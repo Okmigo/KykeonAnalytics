@@ -32,6 +32,21 @@ body {
     overflow-x: hidden;
 }
 
+#particles-container {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+#particles-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
 body::before {
     content: '';
     position: fixed;
